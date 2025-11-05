@@ -20,16 +20,5 @@ export async function createInvoice(formData: FormData) {
     amount: formData.get("amount"),
     status: formData.get("status"),
   });
-
-  // 上記と同じ動作
-  // const form  = {
-  //   customerId: formData.get("customerId"),
-  //   amount: formData.get("amount"),
-  //   status: formData.get("status"),
-  // };
-  // const invoice = CreateInvoice.parse(form);
-  // const  {customerId, amount, status} = invoice;
-
-  // console.log('form', form);
-  // console.log('invoice', invoice);
+  const amountInCents = amount * 100; //金額をセントに変換
 }
