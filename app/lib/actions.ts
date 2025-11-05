@@ -15,21 +15,21 @@ const CreateInvoice = FormSchema.omit({ id: true, date: true }); // ③omit(xxx)
 
 // ④CreateInvoiceを使って型検証
 export async function createInvoice(formData: FormData) {
-  // const {customerId, amount, status} = CreateInvoice.parse({
-  //   customerId: formData.get("customerId"),
-  //   amount: formData.get("amount"),
-  //   status: formData.get("status"),
-  // });
-
-  // 上記と同じ動作
-  const form  = {
+  const {customerId, amount, status} = CreateInvoice.parse({
     customerId: formData.get("customerId"),
     amount: formData.get("amount"),
     status: formData.get("status"),
-  };
-  const invoice = CreateInvoice.parse(form);
-  const  {customerId, amount, status} = invoice;
+  });
 
-  console.log('form', form);
-  console.log('invoice', invoice);
+  // 上記と同じ動作
+  // const form  = {
+  //   customerId: formData.get("customerId"),
+  //   amount: formData.get("amount"),
+  //   status: formData.get("status"),
+  // };
+  // const invoice = CreateInvoice.parse(form);
+  // const  {customerId, amount, status} = invoice;
+
+  // console.log('form', form);
+  // console.log('invoice', invoice);
 }
