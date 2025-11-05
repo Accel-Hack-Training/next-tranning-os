@@ -1,6 +1,9 @@
 "use server"; //ファイル内のエクスポートされたすべての関数をサーバーアクションとしてマークする
 
-import { z } from "zod"; // ①import
+import { z } from "zod";
+import postgres from 'postgres';
+
+const sql = postgres(process.env.POSTGRES_URL!, { ssl: 'require'});
 
 // ②スキーマの定義
 const FormSchema = z.object({
@@ -22,5 +25,8 @@ export async function createInvoice(formData: FormData) {
   });
   const amountInCents = amount * 100; //金額をセントに変換
   const date = new Date().toISOString().split('T');
-  // console.log('date', date); 
+
+  await sql`
+  INSERT INTO invoices (customer_id, amount, status, date)
+  VALUES (${customerId}, ${amountInCents}, ${status}, ${date})`;
 }
