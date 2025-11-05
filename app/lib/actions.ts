@@ -7,5 +7,5 @@ export async function createInvoice(formData: formData) {
     status: formData.get('status'),
   };
 
-  console.log(rawFormData);
+  console.log(typeof rawFormData.amount);
 }
