@@ -20,6 +20,11 @@ const CreateInvoice = FormSchema.omit({ id: true, date: true }); // ③omit(xxx)
 
 const UpdateInvoice = FormSchema.omit({ id: true, date: true }); // invoice更新する用
 
+function backErrorMessage (): string {
+  return 'Database Error: Failed to Create Invoice.';
+}
+
+
 // ④CreateInvoiceを使って型検証
 export async function createInvoice(formData: FormData) {
   const {customerId, amount, status} = CreateInvoice.parse({
@@ -37,9 +42,7 @@ export async function createInvoice(formData: FormData) {
     VALUES (${customerId}, ${amountInCents}, ${status}, ${date})`;
   } catch (error) {
     console.error(error);
-    return {
-      message: 'Database Error: Failed to Create Invoice.',
-    };
+    backErrorMessage();
   }
 
   revalidatePath('/dashboard/invoices');
