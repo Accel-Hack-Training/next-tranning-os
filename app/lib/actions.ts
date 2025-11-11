@@ -20,6 +20,17 @@ const CreateInvoice = FormSchema.omit({ id: true, date: true }); // ③omit(xxx)
 
 const UpdateInvoice = FormSchema.omit({ id: true, date: true }); // invoice更新する用
 
+
+// 公式通りでやると型に関するエラー出たため処理を切り出し
+function backErrorMessageForCreateInvoice (): string {
+  return 'Database Error: Failed to Create Invoice.';
+}
+
+function backErrorMessageForUpdateInvoice (): string {
+  return 'Database Error: Failed to Update Invoice.';
+}
+
+
 // ④CreateInvoiceを使って型検証
 export async function createInvoice(formData: FormData) {
   const {customerId, amount, status} = CreateInvoice.parse({
@@ -27,12 +38,18 @@ export async function createInvoice(formData: FormData) {
     amount: formData.get("amount"),
     status: formData.get("status"),
   });
+
   const amountInCents = amount * 100; //金額をセントに変換
   const date = new Date().toISOString().split('T');
 
-  await sql`
-  INSERT INTO invoices (customer_id, amount, status, date)
-  VALUES (${customerId}, ${amountInCents}, ${status}, ${date})`;
+  try {
+    await sql`
+    INSERT INTO invoices (customer_id, amount, status, date)
+    VALUES (${customerId}, ${amountInCents}, ${status}, ${date})`;
+  } catch (error) {
+    console.error(error);
+    backErrorMessageForCreateInvoice();
+  }
 
   revalidatePath('/dashboard/invoices');
   redirect('/dashboard/invoices'); // リダイレクト
@@ -46,13 +63,18 @@ export async function updateInvoice(id: string, formData: FormData) {
   });
  
   const amountInCents = amount * 100;
- 
-  await sql`
+
+  try {
+    await sql`
     UPDATE invoices
     SET customer_id = ${customerId}, amount = ${amountInCents}, status = ${status}
     WHERE id = ${id}
   `;
- 
+  } catch (error) {
+    console.error(error);
+    backErrorMessageForUpdateInvoice();
+  }
+
   revalidatePath('/dashboard/invoices');
   redirect('/dashboard/invoices');
 }
