@@ -35,9 +35,17 @@ function backErrorMessageForUpdateInvoice (): string {
   return 'Database Error: Failed to Update Invoice.';
 }
 
+export type State = {
+  errors?: {
+    customerId?: string[];
+    amount?: string[];
+    status?: string[];
+  };
+  message?: string | null;
+};
 
 // ④CreateInvoiceを使って型検証
-export async function createInvoice(formData: FormData) {
+export async function createInvoice(prevState: State, formData: FormData) { // prevStateにはuseActionStateフックから渡された状態が入っている
   const {customerId, amount, status} = CreateInvoice.parse({
     customerId: formData.get("customerId"),
     amount: formData.get("amount"),
