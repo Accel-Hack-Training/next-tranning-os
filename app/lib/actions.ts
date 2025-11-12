@@ -52,6 +52,14 @@ export async function createInvoice(prevState: State, formData: FormData) { // p
     status: formData.get("status"),
   });
 
+  // フォームバリデーションが失敗したら早くエラーを返す
+  if (!validatedFields.success) {
+    return {
+      errors: validatedFields.error.flatten().fieldErrors,
+      message: 'Missing Fields. Failed to Create Invoice.',
+    };
+  }
+  
   const amountInCents = amount * 100; //金額をセントに変換
   const date = new Date().toISOString().split('T');
 
