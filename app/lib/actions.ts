@@ -63,7 +63,7 @@ export async function createInvoice(prevState: State, formData: FormData) { // p
   // データベースに入れるためのデータの準備
   const { customerId, amount, status } = validatedFields.data;
   const amountInCents = amount * 100; //金額をセントに変換
-  const date = new Date().toISOString().split('T');
+  const date = new Date().toISOString().split('T')[0];
 
   try {
     await sql`
