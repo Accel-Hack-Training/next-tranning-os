@@ -1,6 +1,6 @@
 "use server"; //ファイル内のエクスポートされたすべての関数をサーバーアクションとしてマークする
 
-import { signIn } from "next-auth/react";
+import { signIn } from "@/auth"; 
 import { AuthError } from "next-auth";
 import { z } from "zod";
 import { revalidatePath } from "next/cache";
