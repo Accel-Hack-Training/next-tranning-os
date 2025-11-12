@@ -46,7 +46,7 @@ export type State = {
 
 // ④CreateInvoiceを使って型検証
 export async function createInvoice(prevState: State, formData: FormData) { // prevStateにはuseActionStateフックから渡された状態が入っている
-  const {customerId, amount, status} = CreateInvoice.parse({
+  const validatedFields = CreateInvoice.safeParse({ // safeParse:successまたはerrorを含むオブジェクトを返す
     customerId: formData.get("customerId"),
     amount: formData.get("amount"),
     status: formData.get("status"),
