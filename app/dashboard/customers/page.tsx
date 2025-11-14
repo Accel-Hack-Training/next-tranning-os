@@ -1,7 +1,7 @@
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: 'Dashboard | Acme Dashboard',
+  title: 'Customers | Acme Dashboard',
 }
 
 export default function Page() {
